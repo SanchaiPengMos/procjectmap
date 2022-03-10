@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import GoogleMapReact from 'google-map-react';
 
+import { apiGetUser } from '../../service/api/user';
+
+import { apiGetLocation } from '../../service/api/location';
+
 import "./Gmap.css"
 
 const AnyReactComponent = ({ text }) => <div className='i-c' > <img src={text} /> </div>;
@@ -9,7 +13,11 @@ class SimpleMap extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { counter: 0 };
+    this.state = { 
+      counter: 0,
+      Shop : ""
+    
+    };
   }
 
   static defaultProps = {
@@ -20,8 +28,42 @@ class SimpleMap extends Component {
     zoom: 3
   };
 
+  componentDidMount() {
+
+    apiGetUser()
+      .then((res) => {
+    
+      } )
+      .catch((err) => {
+        console.log("err GetUser: ", err )
+      })
+
+    apiGetLocation()
+      .then((res) => {
+        console.log("res Location", res.data.result )
+
+        this.setState({
+          Shop:res.data.result
+        })
+
+      })
+      .catch((err) => {
+        console.log("err GetLocation", err )
+       } )
+
+
+
+  }
+
+
   render() {
-    console.log(this.props.center)
+    // console.log(this.props.center)
+
+    // console.log( this.state.Shop)
+
+    // this.state.Shop.map((idx) =>{
+    //   console.log(idx)
+    // } )
 
     const Data = [
       {
@@ -33,19 +75,11 @@ class SimpleMap extends Component {
         id:2,
         lat:13.7527239,
         lng:100.4506711
-      },
-      {
-        id:3,
-        lat:16.8923038,
-        lng:99.1227091
-      },
-      {
-        id:4,
-        lat:16.8947899,
-        lng:99.1216698
       }
     ]
+    // const Data = this.state.Shop
 
+    console.log( this.state.Shop.map((res) => console.log(res.id) )  )
     console.log(Data)
 
     return (
@@ -62,13 +96,17 @@ class SimpleMap extends Component {
             text="./icon/mark.png"
           /> */}
           
-          {Data.map((idx) => (
-            <AnyReactComponent
-            lat={idx.lat}
-            lng={idx.lng}
-            text="./icon/mark.png"
-          /> 
-          ) )}
+          {Data.map((idx) => { 
+            return(
+              (
+                <AnyReactComponent
+                lat={idx.lat}
+                lng={idx.lng}
+                text="./icon/mark.png"
+              /> 
+              )
+            )
+           } )}
 
         </GoogleMapReact>
       </div>
