@@ -28,42 +28,9 @@ class SimpleMap extends Component {
     zoom: 3
   };
 
-  componentDidMount() {
-
-    apiGetUser()
-      .then((res) => {
-    
-      } )
-      .catch((err) => {
-        console.log("err GetUser: ", err )
-      })
-
-    apiGetLocation()
-      .then((res) => {
-        console.log("res Location", res.data.result )
-
-        this.setState({
-          Shop:res.data.result
-        })
-
-      })
-      .catch((err) => {
-        console.log("err GetLocation", err )
-       } )
-
-
-
-  }
 
 
   render() {
-    // console.log(this.props.center)
-
-    // console.log( this.state.Shop)
-
-    // this.state.Shop.map((idx) =>{
-    //   console.log(idx)
-    // } )
 
     const Data = [
       {
@@ -77,41 +44,30 @@ class SimpleMap extends Component {
         lng:100.4506711
       }
     ]
-    // const Data = this.state.Shop
-
-    console.log( this.state.Shop.map((res) => console.log(res.id) )  )
-    console.log(Data)
+    const localMap = this.props.dataMap.map(item => {
+      return (
+        <AnyReactComponent
+          key={item['id']}
+          lat={item['lat']}
+          lng={item['lng']}
+           text="./icon/mark.png"
+        />
+      );
+    });
 
     return (
-      // Important! Always set the container height explicitly
       <div style={{ height: '50vh', width: '50%' }}>
         <GoogleMapReact
           bootstrapURLKeys={{ key: "AIzaSyCKbpzk5AcL0ZJZQiaa9SIwk6PLWOP2rRU"}}
           defaultCenter={this.props.center}
           defaultZoom={this.props.zoom}
         >
-          {/* <AnyReactComponent
-            lat={13.7245601}
-            lng={100.4930267}
-            text="./icon/mark.png"
-          /> */}
-          
-          {Data.map((idx) => { 
-            return(
-              (
-                <AnyReactComponent
-                lat={idx.lat}
-                lng={idx.lng}
-                text="./icon/mark.png"
-              /> 
-              )
-            )
-           } )}
-
+          {localMap}
         </GoogleMapReact>
       </div>
-    );
-  }
+      
+      )
+}
 }
 
 export default SimpleMap;
