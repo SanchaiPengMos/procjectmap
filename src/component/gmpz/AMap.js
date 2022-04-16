@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import GoogleMapReact from 'google-map-react';
 
-import { apiGetUser } from '../../service/api/user';
+// import { apiGetUser } from '../../service/api/user';
 
 import { apiGetLocation } from '../../service/api/location';
 
@@ -21,17 +21,11 @@ export default class ToMap extends Component {
 
       componentDidMount() {
 
-        apiGetUser()
-          .then((res) => {
-        
-          } )
-          .catch((err) => {
-            console.log("err GetUser: ", err )
-          })
-    
         apiGetLocation()
           .then((res) => {
-    
+            
+            console.log(res)
+
             this.setState({
               Shop:res.data.result
             })
@@ -40,18 +34,12 @@ export default class ToMap extends Component {
           .catch((err) => {
             console.log("err GetLocation", err )
            } )
-    
-    
-    
       }
 
     render(){ 
-
-        // console.log("asdasdasdasdasdas",this.state.Shop)
-
         return(
             <div>
-                <SimpleMap dataMap={this.state.Shop} />
+              <SimpleMap dataMap={this.state.Shop} />
             </div>
         )
     }

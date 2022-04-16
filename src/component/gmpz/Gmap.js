@@ -1,13 +1,40 @@
 import React, { Component } from 'react';
 import GoogleMapReact from 'google-map-react';
 
+
+import { Link } from 'react-router-dom'
+
 import { apiGetUser } from '../../service/api/user';
 
 import { apiGetLocation } from '../../service/api/location';
 
+import DetailShop from "../Toshop/DetailShop"
+import Nav from '../nav/nav';
+
+
 import "./Gmap.css"
 
-const AnyReactComponent = ({ text }) => <div className='i-c' > <img src={text} /> </div>;
+const AnyReactComponent = ({ text,idshop }) => <div className='i-c'> 
+    {/* <img  
+      src={text} 
+      onClick={ () => {
+        <DetailShop ids={idshop} />
+        // window.location.href = `/detail?ids=${idshop}`
+        console.log("ids :", idshop )
+      } }
+      />  */}
+      <Link
+        to={ `/detail?idshop=${idshop}`}
+        >
+          <img  
+            src={text} 
+          />
+        </Link>
+      </div>;
+
+const markerStyle = {
+  position: "absolute"
+};
 
 class SimpleMap extends Component {
 
@@ -25,45 +52,58 @@ class SimpleMap extends Component {
       lat: 13.7245601,
       lng: 100.4930267
     },
-    zoom: 3
+    zoom: 4
   };
 
+  MapShop( Data ){
+    console.log("--->",  Data)
+  }
 
-
+  handleMarkerClick = () => {
+    console.log("cilck")
+  };
+ 
   render() {
 
-    const Data = [
-      {
-        id:1,
-        lat:13.7245601,
-        lng:100.4920267
-      },
-      {
-        id:2,
-        lat:13.7527239,
-        lng:100.4506711
-      }
-    ]
     const localMap = this.props.dataMap.map(item => {
       return (
         <AnyReactComponent
           key={item['id']}
           lat={item['lat']}
           lng={item['lng']}
-           text="./icon/mark.png"
+          idshop={item.id_user}
+          text="./icon/mark.png"
         />
       );
     });
 
+    // const renderMarkers = (map, maps) => {
+    //   let marker = new maps.Marker({
+    //    position: { lat: 13.7245601, lng: 100.4930267 },
+    //    map,
+    //    title: 'Hello World!'
+    //    });
+    //    return marker;
+    //  };
+
     return (
-      <div style={{ height: '50vh', width: '50%' }}>
-        <GoogleMapReact
-          bootstrapURLKeys={{ key: "AIzaSyCKbpzk5AcL0ZJZQiaa9SIwk6PLWOP2rRU"}}
-          defaultCenter={this.props.center}
-          defaultZoom={this.props.zoom}
-        >
-          {localMap}
-        </GoogleMapReact>
+      <div>
+        <Nav />
+        <div style={{ height: '100vh', width: '100%' }} >
+          <GoogleMapReact
+            bootstrapURLKeys={{ key: "AIzaSyCKbpzk5AcL0ZJZQiaa9SIwk6PLWOP2rRU"}}
+            defaultCenter={{ lat: 13.7245601, lng: 100.4930267 }}
+            defaultZoom={10}
+            // onGoogleApiLoaded={({ map, maps }) => renderMarkers(map, maps)}
+
+            // onClick
+            // onClick={ () => { console.log("123456") } }
+          >
+                   {/* <Marker lat={13.7245601} lng={100.4930267} /> */}
+
+            {localMap}
+          </GoogleMapReact>
+        </div>
       </div>
       
       )
